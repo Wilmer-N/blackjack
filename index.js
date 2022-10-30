@@ -3,18 +3,19 @@ const cardGame = (function() {
 const body = document.querySelector("body")
 const cardContainerDealer = document.querySelector("#card-container-dealer")
 const cardContainerPlayer = document.querySelector("#card-container-player")
-const btn = document.querySelector("button")
+const startBtn = document.querySelector("#start")
+const dealerBtn = document.querySelector("#dealer")
+const playerBtn = document.querySelector("#player")
 var suits = ["S", "D", "C", "H"];
 var values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 
 players = []
 
-let cardAmount = 2
 
 const Player = (name) => {
     players.push({Name: name, Hand: []})
     return{
-        name,
+        name
     }
 }
 
@@ -53,22 +54,35 @@ function shuffle() {
     return array;
   }
 
-function giveHand(){
+function reset(){
     cardContainerDealer.innerHTML = ""
     cardContainerPlayer.innerHTML = ""
+}
+
+function startGame(){
+    reset()
+    let cardAmount
     shuffledDeck = shuffle()
     players.forEach(player => {
         player.Hand = []
-        for (let index = 0; index < cardAmount; index++) {
-            player.Hand.push(shuffledDeck[shuffledDeck.length - 1])
-            shuffledDeck.splice(-1, 1)
+        if(player.Name == "dealer"){
+            cardAmount = 1
+        }else{
+            cardAmount = 2
         }
-        displayCard(player.Hand, player)
-    });
+        giveCard(player, cardAmount)
+    }); 
+}
+function giveCard(player, cardAmount){
+        for (let index = 0; index < cardAmount; index++) {
+            let cardIndex = shuffledDeck[shuffledDeck.length - 1]
+            player.Hand.push(cardIndex)
+            shuffledDeck.splice(-1, 1)
+            displayCard(player.Hand[player.Hand.length - 1], player)
+        }
 }
 
-function displayCard(cards, player){
-    cards.forEach(card => {
+function displayCard(card, player){
         const cardDiv = document.createElement("div")
         cardDiv.setAttribute("id", "card")
         if(player.Name == "dealer"){
@@ -77,9 +91,15 @@ function displayCard(cards, player){
             cardContainerPlayer.appendChild(cardDiv)
         }
         cardDiv.textContent = card.Value + card.Suit
-    });
-}
+    };
 
-btn.addEventListener("click", giveHand)
+
+startBtn.addEventListener("click", startGame)  
+dealerBtn.addEventListener("click", function(){
+    giveCard(players[1], 1)
+}) 
+playerBtn.addEventListener("click", function(){
+    giveCard(players[0], 1)
+}) 
 
 })();
