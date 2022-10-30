@@ -8,6 +8,8 @@ var values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 
 players = []
 
+let cardAmount = 3
+
 const Player = (name) => {
     players.push({Name: name, Hand: []})
     return{
@@ -55,26 +57,23 @@ function giveHand(){
     shuffledDeck = shuffle()
     players.forEach(player => {
         player.Hand = []
-        for (let index = 0; index < 2; index++) {
+        for (let index = 0; index < cardAmount; index++) {
             player.Hand.push(shuffledDeck[shuffledDeck.length - 1])
             shuffledDeck.splice(-1, 1)
         }
-        displayCards(player.Hand)
+        displayCard(player.Hand)
     });
 }
-function displayCards(cards){
 
-    const card1 = document.createElement("div")
-    card1.setAttribute("id", "card")
-    const card2 = document.createElement("div")
-    card2.setAttribute("id", "card")
-    cardContainer.appendChild(card1)
-    cardContainer.appendChild(card2)
-    card1.textContent = cards[0].Value + cards[0].Suit
-    card2.textContent += " " + cards[1].Value + cards[1].Suit
+function displayCard(cards){
+    cards.forEach(card => {
+        const cardDiv = document.createElement("div")
+        cardDiv.setAttribute("id", "card")
+        cardContainer.appendChild(cardDiv)
+        cardDiv.textContent = card.Value + card.Suit
+    });
 }
+
 btn.addEventListener("click", giveHand)
-
-
 
 })();
