@@ -1,0 +1,16 @@
+#card{
+    display: inline-block;
+    height: 100px;
+    width: 100px;
+    border: 1px solid black;
+}
+#card-container{
+    width: 100%;
+    height: 500px;
+}
+
+
+#card-container > div:nth-child(3){
+    margin-left: 400px;
+}
+ 
