@@ -1,14 +1,15 @@
 
 const cardGame = (function() {
 const body = document.querySelector("body")
-const cardContainer = document.querySelector("#card-container")
+const cardContainerDealer = document.querySelector("#card-container-dealer")
+const cardContainerPlayer = document.querySelector("#card-container-player")
 const btn = document.querySelector("button")
 var suits = ["S", "D", "C", "H"];
 var values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 
 players = []
 
-let cardAmount = 3
+let cardAmount = 2
 
 const Player = (name) => {
     players.push({Name: name, Hand: []})
@@ -53,7 +54,8 @@ function shuffle() {
   }
 
 function giveHand(){
-    cardContainer.innerHTML = ""
+    cardContainerDealer.innerHTML = ""
+    cardContainerPlayer.innerHTML = ""
     shuffledDeck = shuffle()
     players.forEach(player => {
         player.Hand = []
@@ -61,15 +63,19 @@ function giveHand(){
             player.Hand.push(shuffledDeck[shuffledDeck.length - 1])
             shuffledDeck.splice(-1, 1)
         }
-        displayCard(player.Hand)
+        displayCard(player.Hand, player)
     });
 }
 
-function displayCard(cards){
+function displayCard(cards, player){
     cards.forEach(card => {
         const cardDiv = document.createElement("div")
         cardDiv.setAttribute("id", "card")
-        cardContainer.appendChild(cardDiv)
+        if(player.Name == "dealer"){
+            cardContainerDealer.appendChild(cardDiv)
+        }else{
+            cardContainerPlayer.appendChild(cardDiv)
+        }
         cardDiv.textContent = card.Value + card.Suit
     });
 }
