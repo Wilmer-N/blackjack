@@ -128,10 +128,32 @@ function counter(dealer){
 
 function checkScore(playerScore, dealerScore){
     clothed = ["A", "J", "Q", "K"]
-    for (let index = 0; index < clothed.length; index++) {
-        if(playerScore.includes(clothed[index])){
-            console.log("he got clothes")
+    let x = 0
+    let y = 0
+    playerScore.forEach(card => {
+        if(clothed.includes(card)){
+            b = 10
+        }else{
+            b = parseInt(card)
         }
+        x += b
+    });
+    dealerScore.forEach(card => {
+        if(clothed.includes(card)){
+            b = 10
+        }else{
+            b = parseInt(card)
+        }
+        y += b
+    });
+    console.log(`player score is ${x}`)
+    console.log(`dealer score is ${y}`)
+    winLogic(x, y)
+}
+
+function winLogic(x, y){
+    if(x > 21){
+        console.log("dealer wins")
     }
 }
 
