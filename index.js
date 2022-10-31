@@ -134,7 +134,11 @@ function checkScore(playerScore, dealerScore){
     let y = 0
     playerScore.forEach(card => {
         if(clothed.includes(card)){
-            b = 10
+            if(card == "A" && x > 11){
+                b = 1
+            }else{
+                b = 10
+            }
         }else{
             b = parseInt(card)
         }
