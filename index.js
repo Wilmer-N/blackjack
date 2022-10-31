@@ -62,6 +62,7 @@ function reset(){
 function startGame(){
     playerScore = []
     dealerScore = []
+    playerBtn.style.display = "initial"
     reset() 
     shuffledDeck = shuffle()
     players.forEach(player => {
@@ -103,6 +104,7 @@ function displayCard(card, player){
 startBtn.addEventListener("click", startGame) 
 
 dealerBtn.addEventListener("click", function(){
+    playerBtn.style.display = "none"
     giveCard(players[1], 1)
     counter(1)
 }) 
@@ -153,6 +155,8 @@ function checkScore(playerScore, dealerScore){
 
 function winLogic(x, y){
     if(x > 21){
+        playerBtn.style.display = "none"
+        dealerBtn.style.display = "none"
         console.log("dealer wins")
     }
 }
