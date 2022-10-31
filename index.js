@@ -6,7 +6,7 @@ const cardContainerPlayer = document.querySelector("#card-container-player")
 const startBtn = document.querySelector("#start")
 const dealerBtn = document.querySelector("#dealer")
 const playerBtn = document.querySelector("#player")
-var suits = ["S", "D", "C", "H"];
+var suits = ["♠", "♦", "♣", "♥"];
 var values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 
 players = []
@@ -19,7 +19,7 @@ const Player = (name) => {
     }
 }
 
-const player1 = Player("wilmer")
+const player1 = Player("player")
 const player2 = Player("dealer")
 
 function getDeck(){
@@ -60,18 +60,24 @@ function reset(){
 }
 
 function startGame(){
-    reset()
-    let cardAmount
+    playerScore = []
+    dealerScore = []
+    reset() 
     shuffledDeck = shuffle()
     players.forEach(player => {
         player.Hand = []
-        if(player.Name == "dealer"){
-            cardAmount = 1
-        }else{
-            cardAmount = 2
-        }
-        giveCard(player, cardAmount)
+        giveCard(player, howManyStartingCards(player))
+    
     }); 
+    counter(0)
+}
+
+function howManyStartingCards(player){
+    if(player.Name == "dealer"){
+        return 1
+    }else{
+        return 2
+    }
 }
 function giveCard(player, cardAmount){
         for (let index = 0; index < cardAmount; index++) {
@@ -91,15 +97,42 @@ function displayCard(card, player){
             cardContainerPlayer.appendChild(cardDiv)
         }
         cardDiv.textContent = card.Value + card.Suit
-    };
+};
 
 
-startBtn.addEventListener("click", startGame)  
+startBtn.addEventListener("click", startGame) 
+
 dealerBtn.addEventListener("click", function(){
     giveCard(players[1], 1)
+    counter(1)
 }) 
 playerBtn.addEventListener("click", function(){
     giveCard(players[0], 1)
+    counter(0)
 }) 
+
+function counter(dealer){
+    //"player" is a integer 0 or 1 wich is the corresponding index in the players array
+    cards = players[dealer].Hand
+    if(dealer){
+        dealerScore = []
+    cards.forEach(card => {
+        dealerScore.push(card.Value)
+    })}else{
+        playerScore = []
+    cards.forEach(card => {
+            playerScore.push(card.Value)
+    })}
+    checkScore(playerScore, dealerScore)
+}
+
+function checkScore(playerScore, dealerScore){
+    clothed = ["A", "J", "Q", "K"]
+    for (let index = 0; index < clothed.length; index++) {
+        if(playerScore.includes(clothed[index])){
+            console.log("he got clothes")
+        }
+    }
+}
 
 })();
