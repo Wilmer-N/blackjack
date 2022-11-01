@@ -6,6 +6,8 @@ const cardContainerPlayer = document.querySelector("#card-container-player")
 const startBtn = document.querySelector("#start")
 const dealerBtn = document.querySelector("#dealer")
 const playerBtn = document.querySelector("#player")
+const playerScoreDisplay = document.querySelector("#player-score")
+const dealerScoreDisplay = document.querySelector("#dealer-score")
 var suits = ["♠", "♦", "♣", "♥"];
 var values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 
@@ -72,6 +74,7 @@ function startGame(){
     
     }); 
     counter(0)
+    counter(1)
 }
 
 function howManyStartingCards(player){
@@ -118,7 +121,6 @@ playerBtn.addEventListener("click", function(){
 }) 
 
 function counter(dealer){
-    //"player" is a integer 0 or 1 wich is the corresponding index in the players array
     cards = players[dealer].Hand
     if(dealer){
         dealerCards = []
@@ -169,6 +171,8 @@ function checkScore(playerCards, dealerCards){
     }
     console.log(`player score is ${x}`)
     console.log(`dealer score is ${y}`)
+    playerScoreDisplay.textContent = x
+    dealerScoreDisplay.textContent = y
     winLogic(x, y)
 }
 
