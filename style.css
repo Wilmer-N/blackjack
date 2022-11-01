@@ -23,6 +23,7 @@ body{
     justify-content: space-between;
     padding: 10px;
     border: 10px solid white;
+    position: relative;
 }
 #card-container-dealer{
     display: flex;
@@ -40,8 +41,11 @@ body{
     left: 50%;
 }
 #player-score{
-    bottom: 220px;
+    bottom: 130px;
 }
 #dealer-score{
-    top: 150px;
+    top: 130px;
+}
+#split{
+    display: none;
 }

@@ -8,6 +8,7 @@ const dealerBtn = document.querySelector("#dealer")
 const playerBtn = document.querySelector("#player")
 const playerScoreDisplay = document.querySelector("#player-score")
 const dealerScoreDisplay = document.querySelector("#dealer-score")
+const splitBtn = document.querySelector("#split")
 var suits = ["♠", "♦", "♣", "♥"];
 var values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 
@@ -26,7 +27,6 @@ const player2 = Player("dealer")
 
 function getDeck(){
 	let deck = [];
-
 	for(let i = 0; i < suits.length; i++)
 	{
 		for(let x = 0; x < values.length; x++)
@@ -37,6 +37,7 @@ function getDeck(){
 	}
 	return deck;
 }
+
 function shuffle() {
     array = getDeck()
     let currentIndex = array.length,  randomIndex;
@@ -71,10 +72,21 @@ function startGame(){
     players.forEach(player => {
         player.Hand = []
         giveCard(player, howManyStartingCards(player))
-    
     }); 
+    if(players[0].Hand[0].Value === players[0].Hand[1].Value){
+        offerSplit()
+    }
     counter(0)
     counter(1)
+}
+function offerSplit(){
+    console.log("you want split")
+    splitBtn.style.display = "initial"
+    splitBtn.addEventListener("click", doSplit)
+}
+
+function doSplit(){
+    splitBtn.style.display = "none"
 }
 
 function howManyStartingCards(player){
@@ -104,21 +116,36 @@ function displayCard(card, player){
         cardDiv.textContent = card.Value + card.Suit
 };
 
+window.addEventListener("keydown", function(e){
+    let btnPressed = e.key
+    if(btnPressed == 1){
+        startGame()
+    }else if(btnPressed == 2){
+        dealerBtnPress()
+    }else if(btnPressed == 3){
+        playerBtnPress()
+    }else return
+})
 
 startBtn.addEventListener("click", startGame) 
 
-dealerBtn.addEventListener("click", function(){
+dealerBtn.addEventListener("click", dealerBtnPress) 
+
+function dealerBtnPress(){
     playerBtn.style.display = "none"
     dealerBtn.style.display = "none"
     for (let index = 0; dealerGiveCard; index++) {
         giveCard(players[1], 1)
         counter(1)  
     }
-}) 
-playerBtn.addEventListener("click", function(){
-    giveCard(players[0], 1)
-    counter(0)
-}) 
+}
+
+function playerBtnPress(){
+        giveCard(players[0], 1)
+        counter(0)
+}
+
+playerBtn.addEventListener("click", playerBtnPress) 
 
 function counter(dealer){
     cards = players[dealer].Hand
@@ -169,8 +196,6 @@ function checkScore(playerCards, dealerCards){
     }else{
         dealerGiveCard = false
     }
-    console.log(`player score is ${x}`)
-    console.log(`dealer score is ${y}`)
     playerScoreDisplay.textContent = x
     dealerScoreDisplay.textContent = y
     winLogic(x, y)
@@ -190,7 +215,7 @@ function winLogic(x, y){
     if(x > 21){
         playerBtn.style.display = "none"
         dealerBtn.style.display = "none"
-        console.log("dealer wins")
+            console.log("dealer wins")
     }
 }
 
