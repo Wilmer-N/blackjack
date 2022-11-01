@@ -60,8 +60,8 @@ function reset(){
 }
 
 function startGame(){
-    playerScore = []
-    dealerScore = []
+    playerCards = []
+    dealerCards = []
     playerBtn.style.display = "initial"
     dealerBtn.style.display = "initial"
     reset() 
@@ -121,28 +121,28 @@ function counter(dealer){
     //"player" is a integer 0 or 1 wich is the corresponding index in the players array
     cards = players[dealer].Hand
     if(dealer){
-        dealerScore = []
+        dealerCards = []
     cards.forEach(card => {
-        dealerScore.push(card.Value)
+        dealerCards.push(card.Value)
     })}else{
-        playerScore = []
+        playerCards = []
     cards.forEach(card => {
-            playerScore.push(card.Value)
+        playerCards.push(card.Value)
     })}
-    checkScore(playerScore, dealerScore)
+    checkScore(playerCards, dealerCards)
 }
 
-function checkScore(playerScore, dealerScore){
+function checkScore(playerCards, dealerCards){
     clothed = ["A", "J", "Q", "K"]
     let x = 0
     let y = 0
-    playerScore.forEach(card => {
+    playerCards.forEach(card => {
         if(card == "A"){
-            playerScore[playerScore.length] = "A"
-            playerScore.splice(playerScore.indexOf("A"), 1)
+            playerCards[playerCards.length] = "A"
+            playerCards.splice(playerCards.indexOf("A"), 1)
         }
     })
-    playerScore.forEach(card => {   
+    playerCards.forEach(card => {   
         if(clothed.includes(card)){
             if(whatShouldAceBe(card, x)){
                 b = whatShouldAceBe(card, x)
@@ -154,7 +154,7 @@ function checkScore(playerScore, dealerScore){
         x += b
     });
 
-    dealerScore.forEach(card => {
+    dealerCards.forEach(card => {
         if(clothed.includes(card)){
             b = 10
         }else{
@@ -173,7 +173,6 @@ function checkScore(playerScore, dealerScore){
 }
 
 function whatShouldAceBe(card, x){
-    //jag tänker placera "A" längst bak i playerScore och sedan räkna ut poängen
     if(card == "A" && x > 11){
         return 1
     }else if(card == "A"){
