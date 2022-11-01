@@ -14,7 +14,6 @@ var values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 
 players = []
 
-
 const Player = (name) => {
     players.push({Name: name, Hand: []})
     return{
@@ -24,6 +23,7 @@ const Player = (name) => {
 
 const player1 = Player("player")
 const player2 = Player("dealer")
+
 
 function getDeck(){
 	let deck = [];
@@ -63,6 +63,7 @@ function reset(){
 }
 
 function startGame(){
+
     playerCards = []
     dealerCards = []
     playerBtn.style.display = "initial"
@@ -78,6 +79,9 @@ function startGame(){
     }
     counter(0)
     counter(1)
+    if(playerScoreDisplay.textContent == 21){
+        console.log("BLACKJACKBIAATCH")
+    }
 }
 function offerSplit(){
     console.log("you want split")
@@ -218,5 +222,4 @@ function winLogic(x, y){
             console.log("dealer wins")
     }
 }
-
 })();
