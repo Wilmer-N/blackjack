@@ -46,9 +46,12 @@ body{
 #dealer-score{
     top: 130px;
 }
-#split{
+#split, #dealer, #player, #double{
     display: none;
 }
 #who-win{
     text-align: center;
+}
+#cash, #bet-display{
+    color: white;  
 }

@@ -10,10 +10,29 @@ const playerScoreDisplay = document.querySelector("#player-score")
 const dealerScoreDisplay = document.querySelector("#dealer-score")
 const whoWinDisplay = document.querySelector("#who-win")
 const splitBtn = document.querySelector("#split")
+const betInput = document.querySelector("#bet-input")
+const cashDisplay = document.querySelector("#cash")
+const betDisplay = document.querySelector("#bet-display")
+const doubleDownBtn = document.querySelector("#double")
 var suits = ["♠", "♦", "♣", "♥"];
 var values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 
 players = []
+wallet = 1000
+let bet 
+displayMoney()
+
+function displayMoney(){
+    cashDisplay.textContent = `Cash: ${wallet}$`
+}
+
+function getBet(){
+    bet = parseInt(betInput.value)
+    console.log()
+    betInput.value = ""
+    wallet -= bet
+    displayMoney()
+}
 
 const Player = (name) => {
     players.push({Name: name, Hand: []})
@@ -66,6 +85,9 @@ function reset(){
 function startGame(){
     playerCards = []
     dealerCards = []
+    doubleDownBtn.style.display = "initial"
+    betDisplay.textContent = `Current bet: ${bet}`
+    betInput.style.display = "none"
     whoWinDisplay.textContent = ""
     playerBtn.style.display = "initial"
     dealerBtn.style.display = "initial"
@@ -86,7 +108,7 @@ function startGame(){
         console.log("BLACKJACKBIAATCH")
         counter(0, false, true)
         
-    }   
+    }
 }
 function offerSplit(){
     console.log("you want split")
@@ -127,18 +149,39 @@ function displayCard(card, player){
 
 window.addEventListener("keydown", function(e){
     let btnPressed = e.key
-    if(btnPressed == 1){
-        startGame()
-    }else if(btnPressed == 2){
+    if(btnPressed == "o"){
+        startGameLogic()
+    }else if(btnPressed == "p"){
         dealerBtnPress()
-    }else if(btnPressed == 3){
+    }else if(btnPressed == "å"){
         playerBtnPress()
     }else return
 })
 
-startBtn.addEventListener("click", startGame) 
+startBtn.addEventListener("click", startGameLogic) 
 
-dealerBtn.addEventListener("click", dealerBtnPress) 
+doubleDownBtn.addEventListener("click", doubleDownLogic)
+
+function doubleDownLogic(){
+    giveCard(players[0], 1)
+    counter(0)
+    wallet -= bet
+    bet += bet
+    displayMoney()
+    dealerBtnPress()
+}
+
+function startGameLogic(){
+    if(betInput.value != ""){
+        getBet()
+        startGame()
+    }else{
+        alert("Bet thx")
+    }
+}
+
+
+dealerBtn.addEventListener("click", dealerBtnPress)
 
 function dealerBtnPress(){
     stopGame()
@@ -222,27 +265,40 @@ function whatShouldAceBe(card, x){
 function stopGame(){
     playerBtn.style.display = "none"
     dealerBtn.style.display = "none"
+    betDisplay.textContent = ""
+    doubleDownBtn.style.display = "none"
 }
 
 function winLogic(x, y, stand, blackjack){
     console.log(stand)
     if(x > 21){
         stopGame()
+        betInput.style.display = "initial"
         console.log("dealer wins")
         whoWinDisplay.textContent = "Dealer wins"
     }else if(stand && y >= 17){
         if (y > x && y < 22){
+            betInput.style.display = "initial"
             console.log("dealer wins")
             whoWinDisplay.textContent = "Dealer wins"
         }else if(x == y){
+            betInput.style.display = "initial"
             console.log("push")
             whoWinDisplay.textContent = "Push"
+            wallet += bet
+            displayMoney()
         }else{
+            betInput.style.display = "initial"
             console.log("player wins")
             whoWinDisplay.textContent = "Player wins"
+            wallet += bet * 2
+            displayMoney()
         }
     }else if(blackjack){
+        betInput.style.display = "initial"
         whoWinDisplay.textContent = "BLACKJACK"
+        wallet += bet * 2.5
+        displayMoney()
     }
 }
 })();
