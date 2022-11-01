@@ -164,7 +164,7 @@ doubleDownBtn.addEventListener("click", doubleDownLogic)
 
 function doubleDownLogic(){
     giveCard(players[0], 1)
-    counter(0)
+    counter(0, false, false, true)
     wallet -= bet
     bet += bet
     displayMoney()
@@ -183,7 +183,7 @@ function startGameLogic(){
 
 dealerBtn.addEventListener("click", dealerBtnPress)
 
-function dealerBtnPress(){
+function dealerBtnPress(double){
     stopGame()
     for (let index = 0; dealerGiveCard; index++) {
         giveCard(players[1], 1)
@@ -198,7 +198,7 @@ function playerBtnPress(){
 
 playerBtn.addEventListener("click", playerBtnPress) 
 
-function counter(dealer, stand, blackjack){
+function counter(dealer, stand, blackjack, double){
     cards = players[dealer].Hand
     if(dealer){
         dealerCards = []
@@ -209,10 +209,10 @@ function counter(dealer, stand, blackjack){
     cards.forEach(card => {
         playerCards.push(card.Value)
     })}
-    checkScore(playerCards, dealerCards, stand, blackjack)
+    checkScore(playerCards, dealerCards, stand, blackjack, double)
 }
 
-function checkScore(playerCards, dealerCards, stand, blackjack){
+function checkScore(playerCards, dealerCards, stand, blackjack, double){
     clothed = ["A", "J", "Q", "K"]
     let x = 0
     let y = 0
@@ -242,14 +242,20 @@ function checkScore(playerCards, dealerCards, stand, blackjack){
         }
         y += b
     });
-    if(y < 17){
-        dealerGiveCard = true
-    }else{
+    if(double && x > 22){
         dealerGiveCard = false
+    }else{
+        if(y < 17){
+            dealerGiveCard = true
+        }else{
+            dealerGiveCard = false
+        }
     }
-    playerScoreDisplay.textContent = x
-    dealerScoreDisplay.textContent = y
-    winLogic(x, y, stand, blackjack)
+   
+
+        playerScoreDisplay.textContent = x
+        dealerScoreDisplay.textContent = y
+        winLogic(x, y, stand, blackjack)
 }
 
 function whatShouldAceBe(card, x){
