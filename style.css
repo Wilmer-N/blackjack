@@ -49,3 +49,6 @@ body{
 #split{
     display: none;
 }
+#who-win{
+    text-align: center;
+}

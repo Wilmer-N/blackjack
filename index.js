@@ -8,6 +8,7 @@ const dealerBtn = document.querySelector("#dealer")
 const playerBtn = document.querySelector("#player")
 const playerScoreDisplay = document.querySelector("#player-score")
 const dealerScoreDisplay = document.querySelector("#dealer-score")
+const whoWinDisplay = document.querySelector("#who-win")
 const splitBtn = document.querySelector("#split")
 var suits = ["♠", "♦", "♣", "♥"];
 var values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
@@ -63,11 +64,12 @@ function reset(){
 }
 
 function startGame(){
-
     playerCards = []
     dealerCards = []
+    whoWinDisplay.textContent = ""
     playerBtn.style.display = "initial"
     dealerBtn.style.display = "initial"
+    splitBtn.style.display = "none"
     reset() 
     shuffledDeck = shuffle()
     players.forEach(player => {
@@ -80,8 +82,11 @@ function startGame(){
     counter(0)
     counter(1)
     if(playerScoreDisplay.textContent == 21){
+        stopGame()
         console.log("BLACKJACKBIAATCH")
-    }
+        counter(0, false, true)
+        
+    }   
 }
 function offerSplit(){
     console.log("you want split")
@@ -100,7 +105,7 @@ function howManyStartingCards(player){
         return 2
     }
 }
-function giveCard(player, cardAmount){
+function giveCard(player, cardAmount, stand){
         for (let index = 0; index < cardAmount; index++) {
             let cardIndex = shuffledDeck[shuffledDeck.length - 1]
             player.Hand.push(cardIndex)
@@ -136,11 +141,10 @@ startBtn.addEventListener("click", startGame)
 dealerBtn.addEventListener("click", dealerBtnPress) 
 
 function dealerBtnPress(){
-    playerBtn.style.display = "none"
-    dealerBtn.style.display = "none"
+    stopGame()
     for (let index = 0; dealerGiveCard; index++) {
         giveCard(players[1], 1)
-        counter(1)  
+        counter(1, true)  
     }
 }
 
@@ -151,7 +155,7 @@ function playerBtnPress(){
 
 playerBtn.addEventListener("click", playerBtnPress) 
 
-function counter(dealer){
+function counter(dealer, stand, blackjack){
     cards = players[dealer].Hand
     if(dealer){
         dealerCards = []
@@ -162,10 +166,10 @@ function counter(dealer){
     cards.forEach(card => {
         playerCards.push(card.Value)
     })}
-    checkScore(playerCards, dealerCards)
+    checkScore(playerCards, dealerCards, stand, blackjack)
 }
 
-function checkScore(playerCards, dealerCards){
+function checkScore(playerCards, dealerCards, stand, blackjack){
     clothed = ["A", "J", "Q", "K"]
     let x = 0
     let y = 0
@@ -202,7 +206,7 @@ function checkScore(playerCards, dealerCards){
     }
     playerScoreDisplay.textContent = x
     dealerScoreDisplay.textContent = y
-    winLogic(x, y)
+    winLogic(x, y, stand, blackjack)
 }
 
 function whatShouldAceBe(card, x){
@@ -215,11 +219,30 @@ function whatShouldAceBe(card, x){
     }
 }
 
-function winLogic(x, y){
+function stopGame(){
+    playerBtn.style.display = "none"
+    dealerBtn.style.display = "none"
+}
+
+function winLogic(x, y, stand, blackjack){
+    console.log(stand)
     if(x > 21){
-        playerBtn.style.display = "none"
-        dealerBtn.style.display = "none"
+        stopGame()
+        console.log("dealer wins")
+        whoWinDisplay.textContent = "Dealer wins"
+    }else if(stand && y >= 17){
+        if (y > x && y < 22){
             console.log("dealer wins")
+            whoWinDisplay.textContent = "Dealer wins"
+        }else if(x == y){
+            console.log("push")
+            whoWinDisplay.textContent = "Push"
+        }else{
+            console.log("player wins")
+            whoWinDisplay.textContent = "Player wins"
+        }
+    }else if(blackjack){
+        whoWinDisplay.textContent = "BLACKJACK"
     }
 }
 })();
