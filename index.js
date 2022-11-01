@@ -63,6 +63,7 @@ function startGame(){
     playerScore = []
     dealerScore = []
     playerBtn.style.display = "initial"
+    dealerBtn.style.display = "initial"
     reset() 
     shuffledDeck = shuffle()
     players.forEach(player => {
@@ -105,8 +106,11 @@ startBtn.addEventListener("click", startGame)
 
 dealerBtn.addEventListener("click", function(){
     playerBtn.style.display = "none"
-    giveCard(players[1], 1)
-    counter(1)
+    dealerBtn.style.display = "none"
+    for (let index = 0; dealerGiveCard; index++) {
+        giveCard(players[1], 1)
+        counter(1)  
+    }
 }) 
 playerBtn.addEventListener("click", function(){
     giveCard(players[0], 1)
@@ -133,17 +137,23 @@ function checkScore(playerScore, dealerScore){
     let x = 0
     let y = 0
     playerScore.forEach(card => {
+        if(card == "A"){
+            playerScore[playerScore.length] = "A"
+            playerScore.splice(playerScore.indexOf("A"), 1)
+        }
+    })
+    playerScore.forEach(card => {   
         if(clothed.includes(card)){
-            if(card == "A" && x > 11){
-                b = 1
+            if(whatShouldAceBe(card, x)){
+                b = whatShouldAceBe(card, x)
             }else{
                 b = 10
-            }
-        }else{
+            }}else{
             b = parseInt(card)
         }
         x += b
     });
+
     dealerScore.forEach(card => {
         if(clothed.includes(card)){
             b = 10
@@ -152,9 +162,25 @@ function checkScore(playerScore, dealerScore){
         }
         y += b
     });
+    if(y < 17){
+        dealerGiveCard = true
+    }else{
+        dealerGiveCard = false
+    }
     console.log(`player score is ${x}`)
     console.log(`dealer score is ${y}`)
     winLogic(x, y)
+}
+
+function whatShouldAceBe(card, x){
+    //jag tänker placera "A" längst bak i playerScore och sedan räkna ut poängen
+    if(card == "A" && x > 11){
+        return 1
+    }else if(card == "A"){
+        return 11
+    }else{
+        return false
+    }
 }
 
 function winLogic(x, y){
