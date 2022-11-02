@@ -236,11 +236,15 @@ function checkScore(playerCards, dealerCards, stand, blackjack, double){
 
     dealerCards.forEach(card => {
         if(clothed.includes(card)){
-            b = 10
+            if(card == "A"){
+                c = 11
+            }else{
+                c = 10
+            }
         }else{
-            b = parseInt(card)
+            c = parseInt(card)
         }
-        y += b
+        y += c
     });
     if(double && x > 22){
         dealerGiveCard = false
