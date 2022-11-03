@@ -1,5 +1,6 @@
 
 const cardGame = (function() {
+    //dealerBtnPressed should be standBtnPressed but i cant be asked to change it
 const body = document.querySelector("body")
 const cardContainerDealer = document.querySelector("#card-container-dealer")
 const cardContainerPlayer = document.querySelector("#card-container-player")
@@ -33,6 +34,8 @@ function getBet(){
     wallet -= bet
     displayMoney()
 }
+
+
 
 const Player = (name) => {
     players.push({Name: name, Hand: []})
@@ -85,6 +88,7 @@ function reset(){
 function startGame(){
     playerCards = []
     dealerCards = []
+    startBtn.style.display = "none"
     doubleDownBtn.style.display = "initial"
     betDisplay.textContent = `Current bet: ${bet}`
     betInput.style.display = "none"
@@ -149,11 +153,12 @@ function displayCard(card, player){
 
 window.addEventListener("keydown", function(e){
     let btnPressed = e.key
-    if(btnPressed == "o"){
+    console.log(btnPressed)
+    if(btnPressed == "Enter"){
         startGameLogic()
-    }else if(btnPressed == "p"){
+    }else if(btnPressed == "s"){
         dealerBtnPress()
-    }else if(btnPressed == "å"){
+    }else if(btnPressed == "+"){
         playerBtnPress()
     }else return
 })
@@ -172,11 +177,11 @@ function doubleDownLogic(){
 }
 
 function startGameLogic(){
-    if(betInput.value != ""){
+    if(betInput.value != "" && parseInt(betInput.value) % 10 == 0 && parseInt(betInput.value) <= wallet && parseInt(betInput.value) > 0){
         getBet()
         startGame()
     }else{
-        alert("Bet thx")
+        alert("Bet should be a multiple of 10 and cant be more or less than you have")
     }
 }
 
@@ -192,6 +197,7 @@ function dealerBtnPress(double){
 }
 
 function playerBtnPress(){
+        doubleDownBtn.style.display = "none"
         giveCard(players[0], 1)
         counter(0)
 }
@@ -277,6 +283,7 @@ function stopGame(){
     dealerBtn.style.display = "none"
     betDisplay.textContent = ""
     doubleDownBtn.style.display = "none"
+    startBtn.style.display = "initial"
 }
 
 function winLogic(x, y, stand, blackjack){
